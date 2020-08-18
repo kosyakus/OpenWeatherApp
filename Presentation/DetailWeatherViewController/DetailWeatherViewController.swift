@@ -8,22 +8,20 @@
 import UIKit
 
 class DetailWeatherViewController: UIViewController {
+    
+    // MARK: - IBOutlet
 
+    @IBOutlet weak var weatherImageView: UIImageView!
+    @IBOutlet weak var temperatureLabel: UILabel!
+    @IBOutlet weak var pressureLabel: UILabel!
+    @IBOutlet weak var humidityLabel: UILabel!
+    @IBOutlet weak var windSpeedLabel: UILabel!
+    
+    // MARK: - DetailWeatherViewController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        weatherImageView.layer.cornerRadius = 15
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

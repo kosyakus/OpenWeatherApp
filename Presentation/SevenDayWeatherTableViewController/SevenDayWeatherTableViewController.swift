@@ -13,6 +13,8 @@ class SevenDayWeatherTableViewController: UITableViewController {
     
     let tableCell = "tableCell"
     
+    // MARK: - SevenDayWeatherTableViewController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,7 +46,7 @@ extension SevenDayWeatherTableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: tableCell, for: indexPath) as! SevenDayTableViewCell
         
         cell.temperatureLabel.text = "18" + "℃"
-        cell.pressureLabel.text = "" + "мм ртс"
+        cell.pressureLabel.text = "600" + "мм ртс"
         
         return cell
     }
@@ -58,9 +60,9 @@ extension SevenDayWeatherTableViewController {
     override func tableView(_ tableView: UITableView,
                             didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        //        let filmDetailVC = FilmDetailViewController()
-        //        filmDetailVC.movie = moviesArray[indexPath.row]
-        //        self.navigationController?.pushViewController(filmDetailVC, animated: true)
+        let detailWeatherVC = DetailWeatherViewController()
+        //filmDetailVC.movie = moviesArray[indexPath.row]
+        self.navigationController?.pushViewController(detailWeatherVC, animated: true)
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
     

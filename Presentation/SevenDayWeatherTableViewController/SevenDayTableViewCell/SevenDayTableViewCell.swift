@@ -9,6 +9,8 @@ import UIKit
 
 class SevenDayTableViewCell: UITableViewCell {
     
+    // MARK: - IBOutlet
+    
     @IBOutlet weak var weatherImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var pressureLabel: UILabel!

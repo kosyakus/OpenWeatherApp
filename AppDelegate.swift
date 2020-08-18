@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         
+        /// Установка рутового контроллера
         if let window = window {
             let mainVC = CitiesListTableViewController()
             navigationController = UINavigationController(rootViewController: mainVC)

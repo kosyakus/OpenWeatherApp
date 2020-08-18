@@ -8,14 +8,36 @@
 import UIKit
 
 class CitiesListTableViewController: UITableViewController {
+    
+    // MARK: - Public Properties
+    var citiesArray = ["Москва", "Самара"]
+    var networkManager = NetworkManager()
+    
+    // MARK: - CitiesListTableViewController
         
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
+                                                            target: self,
+                                                            action: #selector(addTapped))
+        
+        getWeather()
+    }
+    
+    func getWeather() {
+        networkManager.getWeather(city: "Moscow") { movies, error in
+            if let error = error {
+                print(error)
+            }
+            if let movies = movies {
+                print(movies)
+            }
+        }
+    }
+    
+    @objc func addTapped() {
+        print("add tapped")
     }
 }
 
@@ -28,15 +50,19 @@ extension CitiesListTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        guard !citiesArray.isEmpty else {
+            return 0
+        }
+        return citiesArray.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-
-        cell.textLabel?.text = "Moscow"
+        
+        let city = citiesArray[indexPath.row]
+        cell.textLabel?.text = city
 
         return cell
     }
@@ -51,7 +77,6 @@ extension CitiesListTableViewController {
                             didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let sevenDayWeatherVC = SevenDayWeatherTableViewController()
-        //filmDetailVC.movie = moviesArray[indexPath.row]
         self.navigationController?.pushViewController(sevenDayWeatherVC, animated: true)
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
