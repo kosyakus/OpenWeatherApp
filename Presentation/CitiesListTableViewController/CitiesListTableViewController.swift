@@ -12,6 +12,7 @@ class CitiesListTableViewController: UITableViewController {
     // MARK: - Public Properties
     var citiesArray = ["Москва", "Самара"]
     var networkManager = NetworkManager()
+    var forecastService = ForecastService()
     
     // MARK: - CitiesListTableViewController
         
@@ -21,18 +22,11 @@ class CitiesListTableViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
                                                             target: self,
                                                             action: #selector(addTapped))
-        
-        getWeather()
     }
     
-    func getWeather() {
-        networkManager.getWeather(city: "Moscow") { movies, error in
-            if let error = error {
-                print(error)
-            }
-            if let movies = movies {
-                print(movies)
-            }
+    func getWeather(city: String, completion: @escaping ([WeatherModel]) -> Void) {
+        forecastService.fetcForecast(city: city) { weatherArray in
+            completion(weatherArray)
         }
     }
     
@@ -77,7 +71,10 @@ extension CitiesListTableViewController {
                             didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let sevenDayWeatherVC = SevenDayWeatherTableViewController()
-        self.navigationController?.pushViewController(sevenDayWeatherVC, animated: true)
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        
+        self.getWeather(city: "") { weatherArray in
+            self.navigationController?.pushViewController(sevenDayWeatherVC, animated: true)
+        }
     }
 }

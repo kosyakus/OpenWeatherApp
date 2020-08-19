@@ -16,8 +16,8 @@ struct CityWeather: Codable {
     
     struct Main: Codable {
         let temperature: Double
-        let pressure: Int
-        let humidity: Int
+        let pressure: Double
+        let humidity: Double
         enum CodingKeys : String, CodingKey {
             case temperature = "temp"
             case pressure

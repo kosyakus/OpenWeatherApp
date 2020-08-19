@@ -5,6 +5,8 @@
 //  Created by Natali on 18.08.2020.
 //
 
+/// Использованные ссылки: https://habr.com/ru/post/443514/
+
 import Foundation
 
 enum NetworkResponse:String {
@@ -44,7 +46,7 @@ struct NetworkManager {
                     do {
                         print(responseData)
                         let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
-                        print(jsonData)
+                        //print(jsonData)
                         let apiResponse = try JSONDecoder().decode(CityWeather.self, from: responseData)
                         completion(apiResponse, nil)
                     }catch {
@@ -58,8 +60,8 @@ struct NetworkManager {
         }
     }
     
-    func getForecast(city: String, completion: @escaping(_ cityWeather: CityWeather?, _ error: String?) -> ()) {
-        router.request(.oneDayWeather(city: city)) { data, response, error in
+    func getForecast(city: String, completion: @escaping(_ cityWeather: WeatherForecast?, _ error: String?) -> ()) {
+        router.request(.forecast(city: city)) { data, response, error in
             
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -76,8 +78,8 @@ struct NetworkManager {
                     do {
                         print(responseData)
                         let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
-                        print(jsonData)
-                        let apiResponse = try JSONDecoder().decode(CityWeather.self, from: responseData)
+                        //print(jsonData)
+                        let apiResponse = try JSONDecoder().decode(WeatherForecast.self, from: responseData)
                         completion(apiResponse, nil)
                     }catch {
                         print(error)

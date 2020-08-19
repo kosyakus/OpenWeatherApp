@@ -24,7 +24,7 @@ extension WeatherApi: EndpointType {
         case .oneDayWeather:
             return "weather"
         case .forecast:
-            return "forecast"
+            return "forecast/daily"
         }
     }
     
