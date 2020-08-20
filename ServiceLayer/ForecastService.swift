@@ -12,11 +12,17 @@ final public class ForecastService {
     var networkManager = NetworkManager()
     
     func fetcForecast(city: String,
-                      completion: @escaping ([WeatherModel]) -> Void) {
+                      completion: @escaping (Swift.Result<[WeatherModel], NetworkError>) -> Void) {
         
         networkManager.getForecast(city: city) { weatherForecast, error in
             if let error = error {
                 print(error)
+                switch error {
+                case "Please check your network connection.":
+                    completion(.failure(.noConnection))
+                default:
+                    completion(.failure(.parametersNil))
+                }
             }
             if let weatherForecast = weatherForecast {
                 print(weatherForecast)
@@ -28,13 +34,13 @@ final public class ForecastService {
                     weatherArray.append(weatherForecastList)
                 }
                 print(weatherArray)
-                completion(weatherArray)
+                completion(.success(weatherArray))
             }
         }
     }
     
     private func weather(from weather: WeatherForecast.List) -> WeatherModel {
-        return WeatherModel(date: weather.date, pressure: weather.pressure, humidity: weather.humidity, temperature: self.temperature(from: weather), weatherDesc: self.weatherDescription(from: weather), icon: self.weatherIcon(from: weather))
+        return WeatherModel(date: "\(weather.date)", pressure: weather.pressure, humidity: weather.humidity, temperature: self.temperature(from: weather), weatherDesc: self.weatherDescription(from: weather), icon: self.weatherIcon(from: weather))
     }
     
     private func temperature(from temperature: WeatherForecast.List) -> Double {
@@ -46,9 +52,15 @@ final public class ForecastService {
         return description.description
     }
     
-    private func weatherIcon(from weatherDescription: WeatherForecast.List) -> String {
+    private func weatherIcon(from weatherDescription: WeatherForecast.List) -> Data? {
         let description = weatherDescription.weather[0]
-        return description.icon
+        var data: Data?
+        URLSession.shared.dataTask(with: URL(string: "http://openweathermap.org/img/w/\(description.icon).png")!) { iconData, _ , _ in
+           if let iconData = iconData {
+              data = iconData
+           }
+        }.resume()
+        return data
     }
     
 }

@@ -8,10 +8,10 @@
 import Foundation
 
 struct WeatherModel {
-    var date: Int
+    var date: String
     var pressure: Double
     var humidity: Double
     var temperature: Double
     var weatherDesc: String
-    var icon: String
+    var icon: Data?
 }

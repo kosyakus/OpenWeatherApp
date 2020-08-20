@@ -5,6 +5,8 @@
 //  Created by Natali on 18.08.2020.
 //
 
+//https://api.openweathermap.org/data/2.5/forecast/daily?q=Москва&units=metric&lang=ru&appid=d185d3526cd34f6cca61803414a1c14b
+
 import Foundation
 
 public enum WeatherApi {

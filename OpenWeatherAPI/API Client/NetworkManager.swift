@@ -45,7 +45,7 @@ struct NetworkManager {
                     }
                     do {
                         print(responseData)
-                        let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
+                        let _ = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
                         //print(jsonData)
                         let apiResponse = try JSONDecoder().decode(CityWeather.self, from: responseData)
                         completion(apiResponse, nil)
@@ -77,7 +77,7 @@ struct NetworkManager {
                     }
                     do {
                         print(responseData)
-                        let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
+                        let _ = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
                         //print(jsonData)
                         let apiResponse = try JSONDecoder().decode(WeatherForecast.self, from: responseData)
                         completion(apiResponse, nil)

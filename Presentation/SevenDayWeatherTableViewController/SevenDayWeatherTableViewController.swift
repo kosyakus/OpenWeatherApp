@@ -13,6 +13,12 @@ class SevenDayWeatherTableViewController: UITableViewController {
     
     let tableCell = "tableCell"
     
+    // MARK: - Public Properties
+    
+    let CDWeatherModel = WeatherViewModel(with: CoreDataRepository(persistentContainer:
+        CoreDataService.shared.persistentContainer))
+    var weatherArray: [WeatherModel]?
+    
     // MARK: - SevenDayWeatherTableViewController
     
     override func viewDidLoad() {
@@ -27,6 +33,16 @@ class SevenDayWeatherTableViewController: UITableViewController {
     /// Метод для регистрации ячейки
     func setUpCell() {
         self.tableView.register(UINib(nibName: "SevenDayTableViewCell", bundle: nil), forCellReuseIdentifier: tableCell)
+    }
+    
+    func saveWeatherToDB() {
+        guard let array = weatherArray else { return }
+        CDWeatherModel.saveRepository(weatherArray: array)
+    }
+    
+    func getWeatherFromDB() {
+        weatherArray = CDWeatherModel.getWeather()
+        self.tableView.reloadData()
     }
 }
 
