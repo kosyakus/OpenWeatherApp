@@ -90,7 +90,7 @@ extension SevenDayWeatherTableViewController {
                             didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let detailWeatherVC = DetailWeatherViewController()
-        //filmDetailVC.movie = moviesArray[indexPath.row]
+        detailWeatherVC.weather = weatherArray?[indexPath.row]
         self.navigationController?.pushViewController(detailWeatherVC, animated: true)
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
