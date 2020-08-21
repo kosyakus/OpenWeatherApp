@@ -31,6 +31,9 @@ class CitiesListTableViewController: UITableViewController {
                                                             action: #selector(addTapped))
     }
     
+    // MARK: - Public methods
+    
+    /// Загрузка погоды с сервера
     func getWeather(city: String, completion: @escaping ([WeatherModel]) -> Void) {
         forecastService.fetcForecast(city: city) { result in
             switch result {
@@ -51,6 +54,7 @@ class CitiesListTableViewController: UITableViewController {
         }
     }
     
+    /// Обработка нажатия на "+"
     @objc func addTapped() {
         self.showAlertWithTextField() { newCity in
             /// Добавляем новый город в массив и новую строчку в таблицу
@@ -94,6 +98,7 @@ class CitiesListTableViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    /// Переход на контроллер с 7-ми дневным прогнозом
     func navigateToSevenDayVC(array: [WeatherModel]?, city: String) {
         DispatchQueue.main.async {
             let sevenDayWeatherVC = SevenDayWeatherTableViewController()

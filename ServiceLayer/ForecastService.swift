@@ -25,16 +25,12 @@ final public class ForecastService {
                 }
             }
             if let weatherForecast = weatherForecast {
-                //print(weatherForecast)
-                
                 var weatherArray = [WeatherModel]()
-                
                 for list in weatherForecast.list {
                     let cityID = weatherForecast.city.name
                     let weatherForecastList = self.weather(from: list, with: cityID)
                     weatherArray.append(weatherForecastList)
                 }
-                //print(weatherArray)
                 completion(.success(weatherArray))
             }
         }

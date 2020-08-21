@@ -21,15 +21,12 @@ class WeatherViewModel {
             let weather = CoreDataWeather(date: weather.date, pressure: weather.pressure, humidity: weather.humidity, temperature: weather.temperature, weatherDescription: weather.weatherDesc, icon: weather.icon, cityID: weather.cityID)
             //insert weather
             try? repository.update(item: weather)
-            //get all articles
-            let items: [CoreDataWeather] = try! repository.getAll(where: nil)
-            
-            print("CoreDATA Number of saved items: \(items.count)")
         }
     }
     
     func getWeather(city: String) -> [WeatherModel] {
         var weatherArray = [WeatherModel]()
+        //get all articles
         guard let items: [CoreDataWeather] = try? repository.getAll(where: nil) else { return weatherArray }
         for item in items {
             guard city.uppercased() == item.cityID?.uppercased() else { return weatherArray }
@@ -41,8 +38,6 @@ class WeatherViewModel {
     
     func deleteRepository() {
         try? repository.deleteAll()
-        let items: [CoreDataWeather] = try! repository.getAll(where: nil)
-        
-        print("CoreDATA Number of existing items after deletion: \(items.count)")
+        let _: [CoreDataWeather] = try! repository.getAll(where: nil)
     }
 }

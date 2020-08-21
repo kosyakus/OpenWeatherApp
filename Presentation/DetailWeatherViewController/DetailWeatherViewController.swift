@@ -17,6 +17,8 @@ class DetailWeatherViewController: UIViewController {
     @IBOutlet weak var humidityLabel: UILabel!
     @IBOutlet weak var WeatherDescriptionLabel: UILabel!
     
+    // MARK: - Public Properties
+    
     var weather: WeatherModel?
     
     // MARK: - DetailWeatherViewController
