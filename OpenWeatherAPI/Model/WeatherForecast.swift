@@ -29,6 +29,15 @@ struct WeatherForecast: Codable {
     }
     
     let list: [List]
+    
+    struct City: Codable {
+        let name: String
+        enum CodingKeys : String, CodingKey {
+            case name
+        }
+    }
+    
+    let city: City
 }
 
 struct Weather: Codable {

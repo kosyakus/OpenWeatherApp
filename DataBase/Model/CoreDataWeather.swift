@@ -14,9 +14,5 @@ public struct CoreDataWeather {
     var temperature: Double
     var weatherDescription: String?
     var icon: Data?
+    var cityID: String?
 }
-
-//public struct Article {
-//    var price: Double
-//    var name: String
-//}

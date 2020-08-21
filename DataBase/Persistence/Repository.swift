@@ -33,5 +33,5 @@ public protocol Storable {
     associatedtype EntityObject: Entity
     
     var model: EntityObject { get }
-    var weatherDate: String { get }
+    var nameId: String { get }
 }

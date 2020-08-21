@@ -18,14 +18,13 @@ class WeatherViewModel {
     func saveRepository(weatherArray: [WeatherModel]) {
         try? repository.deleteAll()
         for weather in weatherArray {
-            let weather = CoreDataWeather(date: weather.date, pressure: weather.pressure, humidity: weather.humidity, temperature: weather.temperature, weatherDescription: weather.weatherDesc, icon: weather.icon)
+            let weather = CoreDataWeather(date: weather.date, pressure: weather.pressure, humidity: weather.humidity, temperature: weather.temperature, weatherDescription: weather.weatherDesc, icon: weather.icon, cityID: weather.cityID)
             //insert weather
             try? repository.update(item: weather)
             //get all articles
-            // swiftlint:disable:next force_try
             let items: [CoreDataWeather] = try! repository.getAll(where: nil)
             
-            print("CoreDATA Number of saved items: \(items.count)")
+            //print("CoreDATA Number of saved items: \(items.count)")
         }
     }
     
@@ -33,7 +32,7 @@ class WeatherViewModel {
         var weatherArray = [WeatherModel]()
         guard let items: [CoreDataWeather] = try? repository.getAll(where: nil) else { return weatherArray }
         for item in items {
-            let weather = WeatherModel(date: item.date ?? "", pressure: item.pressure, humidity: item.humidity, temperature: item.temperature, weatherDesc: item.weatherDescription ?? "", icon: item.icon)
+            let weather = WeatherModel(date: item.date ?? "", pressure: item.pressure, humidity: item.humidity, temperature: item.temperature, weatherDesc: item.weatherDescription ?? "", icon: item.icon, cityID: item.cityID ?? "")
             weatherArray.append(weather)
         }
         return weatherArray
@@ -41,7 +40,6 @@ class WeatherViewModel {
     
     func deleteRepository() {
         try? repository.deleteAll()
-        // swiftlint:disable:next force_try
         let items: [CoreDataWeather] = try! repository.getAll(where: nil)
         
         print("CoreDATA Number of existing items after deletion: \(items.count)")

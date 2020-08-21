@@ -25,22 +25,23 @@ final public class ForecastService {
                 }
             }
             if let weatherForecast = weatherForecast {
-                print(weatherForecast)
+                //print(weatherForecast)
                 
                 var weatherArray = [WeatherModel]()
                 
                 for list in weatherForecast.list {
-                    let weatherForecastList = self.weather(from: list)
+                    let cityID = weatherForecast.city.name
+                    let weatherForecastList = self.weather(from: list, with: cityID)
                     weatherArray.append(weatherForecastList)
                 }
-                print(weatherArray)
+                //print(weatherArray)
                 completion(.success(weatherArray))
             }
         }
     }
     
-    private func weather(from weather: WeatherForecast.List) -> WeatherModel {
-        return WeatherModel(date: "\(weather.date)", pressure: weather.pressure, humidity: weather.humidity, temperature: self.temperature(from: weather), weatherDesc: self.weatherDescription(from: weather), icon: self.weatherIcon(from: weather))
+    private func weather(from weather: WeatherForecast.List, with cityId: String) -> WeatherModel {
+        return WeatherModel(date: "\(weather.date)", pressure: weather.pressure, humidity: weather.humidity, temperature: self.temperature(from: weather), weatherDesc: self.weatherDescription(from: weather), icon: self.weatherIcon(from: weather), cityID: cityId)
     }
     
     private func temperature(from temperature: WeatherForecast.List) -> Double {
@@ -54,13 +55,7 @@ final public class ForecastService {
     
     private func weatherIcon(from weatherDescription: WeatherForecast.List) -> Data? {
         let description = weatherDescription.weather[0]
-        var data: Data?
-        URLSession.shared.dataTask(with: URL(string: "http://openweathermap.org/img/w/\(description.icon).png")!) { iconData, _ , _ in
-           if let iconData = iconData {
-              data = iconData
-           }
-        }.resume()
-        return data
+        return URL(string: "https://openweathermap.org/img/w/\(description.icon).png")?.convertUrlToData()
     }
     
 }

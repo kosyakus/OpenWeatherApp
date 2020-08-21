@@ -14,4 +14,5 @@ struct WeatherModel {
     var temperature: Double
     var weatherDesc: String
     var icon: Data?
+    var cityID: String
 }

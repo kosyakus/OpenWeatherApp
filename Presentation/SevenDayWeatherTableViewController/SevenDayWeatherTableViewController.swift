@@ -25,7 +25,11 @@ class SevenDayWeatherTableViewController: UITableViewController {
         super.viewDidLoad()
         
         self.setUpCell()
-        //self.clearsSelectionOnViewWillAppear = false
+        if weatherArray == nil {
+            getWeatherFromDB()
+        } else {
+            saveWeatherToDB()
+        }
     }
     
     // MARK: - Public methods
@@ -55,14 +59,23 @@ extension SevenDayWeatherTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        guard let array = weatherArray else {
+            return 0
+        }
+        return array.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: tableCell, for: indexPath) as! SevenDayTableViewCell
         
-        cell.temperatureLabel.text = "18" + "℃"
-        cell.pressureLabel.text = "600" + "мм ртс"
+        guard let array = weatherArray else { return cell }
+        let weather = array[indexPath.row]
+        cell.temperatureLabel.text = "\(weather.temperature)" + "℃"
+        cell.pressureLabel.text = "\(weather.pressure)" + "мм ртс"
+        if let icon = weather.icon {
+            cell.imageView?.image = UIImage(data: icon)
+        }
+        
         
         return cell
     }

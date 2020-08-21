@@ -15,11 +15,20 @@ class CitiesListTableViewController: UITableViewController {
     var networkManager = NetworkManager()
     var forecastService = ForecastService()
     
+    let CDWeatherModel = WeatherViewModel(with: CoreDataRepository(persistentContainer:
+    CoreDataService.shared.persistentContainer))
+    
     // MARK: - CitiesListTableViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        citiesArray = ["Moscow"]
+        if UserSettings.shareInstance.isFirstTime {
+            citiesArray = ["Moscow"]
+            UserSettings.shareInstance.isFirstTime = false
+        } else {
+            citiesArray = UserSettings.shareInstance.citiesArray
+        }
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
                                                             target: self,
                                                             action: #selector(addTapped))
@@ -46,7 +55,6 @@ class CitiesListTableViewController: UITableViewController {
     }
     
     @objc func addTapped() {
-        print("add tapped")
         self.showAlertWithTextField() { newCity in
             /// Добавляем новый город в массив и новую строчку в таблицу
             self.citiesArray?.append(newCity)
@@ -54,6 +62,7 @@ class CitiesListTableViewController: UITableViewController {
             self.tableView.performBatchUpdates({
                 self.tableView.insertRows(at: [IndexPath(row: array.count - 1, section: 0)], with: .automatic)
             }, completion: nil)
+            UserSettings.shareInstance.citiesArray = array
         }
     }
     
@@ -62,7 +71,6 @@ class CitiesListTableViewController: UITableViewController {
         let alertController = UIAlertController(title: "Добавьте новый город", message: nil, preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: "Добавить", style: .default) { (_) in
             if let txtField = alertController.textFields?.first, let text = txtField.text {
-                print("Text==>" + text)
                 completion(text)
             }
         }
@@ -82,6 +90,13 @@ class CitiesListTableViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    func showNoConnectionAlert() {
+        let alertController = UIAlertController(title: "Отсутствует подключение к интернету", message: nil, preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "Ok", style: .default) { (_) in }
+        alertController.addAction(confirmAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func navigateToSevenDayVC(array: [WeatherModel]?) {
         DispatchQueue.main.async {
             let sevenDayWeatherVC = SevenDayWeatherTableViewController()
@@ -91,6 +106,10 @@ class CitiesListTableViewController: UITableViewController {
             }
             self.navigationController?.pushViewController(sevenDayWeatherVC, animated: true)
         }
+    }
+    
+    func getWeatherFromDB() -> [WeatherModel]? {
+        return CDWeatherModel.getWeather()
     }
 }
 
@@ -145,9 +164,19 @@ extension CitiesListTableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             citiesArray?.remove(at: indexPath.row)
+            UserSettings.shareInstance.citiesArray = citiesArray ?? []
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }
     }
 }
+
+/*
+ /// Проверим, есть ли такой город в CoreData
+ let weatherArray = self.getWeatherFromDB()
+ guard let arr = weatherArray, !arr.isEmpty else {
+     self.showNoConnectionAlert()
+     return
+ }
+ */

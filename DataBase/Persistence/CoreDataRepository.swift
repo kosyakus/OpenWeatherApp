@@ -30,15 +30,18 @@ class CoreDataRepository<RepositoryObject>: Repository
     }
     
     func update(item: RepositoryObject) throws {
-        try delete(item: item)
+        //try delete(item: item)
         try insert(item: item)
     }
     
     func delete(item: RepositoryObject) throws {
-        let predicate = NSPredicate(format: "date == %@", item.toStorable(in: persistentContainer.viewContext).weatherDate)
+        let predicate = NSPredicate(format: "nameId == %@", item.toStorable(in: persistentContainer.viewContext).nameId)
         let items = try getManagedObjects(with: predicate)
-
-        persistentContainer.viewContext.delete(items.first!)
+        
+        //if !items.isEmpty {
+            persistentContainer.viewContext.delete(items.first!)
+        //}
+        
         saveContext()
     }
     
