@@ -15,9 +15,6 @@ class CitiesListTableViewController: UITableViewController {
     var networkManager = NetworkManager()
     var forecastService = ForecastService()
     
-    let CDWeatherModel = WeatherViewModel(with: CoreDataRepository(persistentContainer:
-    CoreDataService.shared.persistentContainer))
-    
     // MARK: - CitiesListTableViewController
     
     override func viewDidLoad() {
@@ -43,7 +40,7 @@ class CitiesListTableViewController: UITableViewController {
                 print(error)
                 switch error {
                 case .noConnection:
-                    self.navigateToSevenDayVC(array: nil)
+                    self.navigateToSevenDayVC(array: nil, city: city)
                 default:
                     DispatchQueue.main.async {
                         self.showErrorAlert()
@@ -97,19 +94,17 @@ class CitiesListTableViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    func navigateToSevenDayVC(array: [WeatherModel]?) {
+    func navigateToSevenDayVC(array: [WeatherModel]?, city: String) {
         DispatchQueue.main.async {
             let sevenDayWeatherVC = SevenDayWeatherTableViewController()
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             if array != nil {
                 sevenDayWeatherVC.weatherArray = array
+            } else {
+                sevenDayWeatherVC.city = city
             }
             self.navigationController?.pushViewController(sevenDayWeatherVC, animated: true)
         }
-    }
-    
-    func getWeatherFromDB() -> [WeatherModel]? {
-        return CDWeatherModel.getWeather()
     }
 }
 
@@ -156,7 +151,7 @@ extension CitiesListTableViewController {
         
         guard let text = cell?.textLabel?.text else { return }
         self.getWeather(city: text) { weatherArray in
-            self.navigateToSevenDayVC(array: weatherArray)
+            self.navigateToSevenDayVC(array: weatherArray, city: text)
         }
     }
     
@@ -168,15 +163,7 @@ extension CitiesListTableViewController {
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
+            // TO DO: Придумать,как удалять город из БД, если он написан на англ.
         }
     }
 }
-
-/*
- /// Проверим, есть ли такой город в CoreData
- let weatherArray = self.getWeatherFromDB()
- guard let arr = weatherArray, !arr.isEmpty else {
-     self.showNoConnectionAlert()
-     return
- }
- */

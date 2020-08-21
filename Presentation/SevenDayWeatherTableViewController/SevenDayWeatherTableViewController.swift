@@ -18,6 +18,7 @@ class SevenDayWeatherTableViewController: UITableViewController {
     let CDWeatherModel = WeatherViewModel(with: CoreDataRepository(persistentContainer:
         CoreDataService.shared.persistentContainer))
     var weatherArray: [WeatherModel]?
+    var city: String?
     
     // MARK: - SevenDayWeatherTableViewController
     
@@ -26,7 +27,7 @@ class SevenDayWeatherTableViewController: UITableViewController {
         
         self.setUpCell()
         if weatherArray == nil {
-            getWeatherFromDB()
+            getWeatherFromDB(city: city ?? "")
         } else {
             saveWeatherToDB()
         }
@@ -40,12 +41,12 @@ class SevenDayWeatherTableViewController: UITableViewController {
     }
     
     func saveWeatherToDB() {
-        guard let array = weatherArray else { return }
+        guard weatherArray != nil, let array = weatherArray else { return }
         CDWeatherModel.saveRepository(weatherArray: array)
     }
     
-    func getWeatherFromDB() {
-        weatherArray = CDWeatherModel.getWeather()
+    func getWeatherFromDB(city: String) {
+        weatherArray = CDWeatherModel.getWeather(city: city)
         self.tableView.reloadData()
     }
 }
