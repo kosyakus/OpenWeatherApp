@@ -40,6 +40,7 @@ class SevenDayWeatherTableViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "SevenDayTableViewCell", bundle: nil), forCellReuseIdentifier: tableCell)
     }
     
+    ///  Сохранение погоды в БД
     func saveWeatherToDB() {
         guard weatherArray != nil, let array = weatherArray else { return }
         CDWeatherModel.saveRepository(weatherArray: array)

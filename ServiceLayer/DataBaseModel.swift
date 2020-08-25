@@ -38,6 +38,9 @@ class WeatherViewModel {
     
     func deleteRepository() {
         try? repository.deleteAll()
-        let _: [CoreDataWeather] = try! repository.getAll(where: nil)
+        let _
+        
+        
+        : [CoreDataWeather] = try! repository.getAll(where: nil)
     }
 }
